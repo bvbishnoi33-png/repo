@@ -1,24 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
+  <title>User Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Data Portal</title>
-  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f8fafc;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 250px;
+      height: 100%;
+      background: #1e293b;
+      padding: 1rem;
+      transition: .3s;
+    }
+    nav a {
+      display: block;
+      color: white;
+      padding: 10px 0;
+      text-decoration: none;
+    }
+    nav.open { left: 0; }
+    main {
+      padding: 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    }
+    .empty {
+      text-align: center;
+      color: #64748b;
+      padding: 2rem;
+    }
+  </style>
 </head>
 <body>
 
-<header class="header">
-  <h1>Secure Data Portal</h1>
+<header>
+  <span class="menu" onclick="toggle()">☰</span>
+  <h2>Information Portal</h2>
 </header>
 
-<main class="container">
-  <div id="contentGrid" class="grid"></div>
-</main>
+<nav id="nav">
+  <a href="#" onclick="load('news')">News</a>
+  <a href="#" onclick="load('instructions')">Instructions</a>
+  <a href="#" onclick="load('syllabus')">Syllabus</a>
+  <a href="#" onclick="load('notices')">Notices</a>
+  <a href="#" onclick="load('images')">Images</a>
+  <a href="#" onclick="load('videos')">Videos</a>
+  <a href="#" onclick="load('documents')">Documents</a>
+</nav>
 
-<footer class="footer">© 2026 Data Portal</footer>
+<main id="content"></main>
+
+<script>
+  function toggle() {
+    document.getElementById("nav").classList.toggle("open");
+  }
+</script>
+
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
+
 </body>
 </html>
-
