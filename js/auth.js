@@ -1,8 +1,4 @@
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    import { onAuthStateChanged } 
+import { onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 onAuthStateChanged(auth, (user) => {
@@ -10,7 +6,3 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "login.html";
   }
 });
-
-  }
-});
-
