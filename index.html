@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>User Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"/>
+  <title>Vipul Bishnoi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <style>
-    * {
-      box-sizing: border-box;
-      max-width: 100%;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
       background: #f8fafc;
       overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
-      width: 100%;
       background: #0f172a;
       color: white;
       padding: 1rem;
@@ -33,35 +31,19 @@
       cursor: pointer;
     }
 
-    h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
-    /* OFF-CANVAS MENU */
     nav {
       position: fixed;
       top: 0;
       left: 0;
-      height: 100%;
       width: 260px;
+      height: 100%;
       background: #1e293b;
       padding: 1rem;
       transform: translateX(-100%);
-      transition: transform .3s ease;
+      transition: .3s;
       z-index: 1000;
     }
-
-    nav.open {
-      transform: translateX(0);
-    }
-
-    nav .close {
-      color: white;
-      font-size: 22px;
-      cursor: pointer;
-      text-align: right;
-    }
+    nav.open { transform: translateX(0); }
 
     nav a {
       display: block;
@@ -70,42 +52,50 @@
       text-decoration: none;
     }
 
+    nav .close {
+      text-align: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+    }
+
     main {
       max-width: 1200px;
       margin: auto;
-      padding: 1rem;
+      padding: 1.5rem;
+      flex: 1;
+      animation: fade .4s ease;
     }
 
-    #contentGrid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .card {
       background: white;
-      border-radius: 12px;
-      padding: 1rem;
+      border-radius: 14px;
+      padding: 1.5rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.08);
+      margin-bottom: 1rem;
     }
 
-    .card img {
-      width: 100%;
-      height: auto;
+    .profile-buttons a {
+      display: inline-block;
+      margin: 6px;
+      padding: 10px 14px;
       border-radius: 8px;
-      display: block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
     }
 
-    .empty {
+    footer {
       text-align: center;
+      padding: 0.8rem;
+      font-size: 0.85rem;
       color: #64748b;
-      padding: 2rem;
-    }
-
-    @media (min-width: 768px) {
-      #contentGrid {
-        grid-template-columns: repeat(3, 1fr);
-      }
     }
   </style>
 </head>
@@ -113,11 +103,15 @@
 
 <header>
   <span class="menu" onclick="toggleMenu()">☰</span>
-  <h2>Information Portal</h2>
+  <div>
+    <strong>Vipul Bishnoi</strong><br>
+    <small>Professional Web Developer</small>
+  </div>
 </header>
 
 <nav id="nav">
   <div class="close" onclick="toggleMenu()">✕</div>
+  <a href="#" onclick="showHome()">Home</a>
   <a href="#" onclick="load('news')">News</a>
   <a href="#" onclick="load('instructions')">Instructions</a>
   <a href="#" onclick="load('syllabus')">Syllabus</a>
@@ -125,37 +119,63 @@
   <a href="#" onclick="load('images')">Images</a>
   <a href="#" onclick="load('videos')">Videos</a>
   <a href="#" onclick="load('documents')">Documents</a>
+  <a href="#" onclick="showAbout()">About Us</a>
 </nav>
 
-<main>
-  <div id="contentGrid"></div>
+<main id="contentArea">
+  <!-- Home loads by default -->
 </main>
+
+<footer>
+  © 2026 Vipul Bishnoi. All rights reserved.
+</footer>
 
 <script>
   const nav = document.getElementById("nav");
-  const grid = document.getElementById("contentGrid");
+  const content = document.getElementById("contentArea");
 
   function toggleMenu() {
     nav.classList.toggle("open");
   }
 
-  function load(category) {
-    // close menu automatically
+  function showHome() {
     nav.classList.remove("open");
-
-    // clear previous content
-    grid.innerHTML = "";
-
-    // store selected category (used by user.js)
-    window.selectedCategory = category;
-
-    // re-run Firestore fetch
-    if (typeof loadContent === "function") {
-      loadContent(category);
-    }
+    content.innerHTML = `
+      <div class="card">
+        <h2>Welcome Dear User 👋</h2>
+        <p>
+          This portal is designed to provide important updates, documents,
+          notices, and resources in a clean and secure way.
+        </p>
+        <p>
+          Use the menu to explore different sections.
+        </p>
+      </div>
+    `;
   }
-</script>
 
+  function showAbout() {
+    nav.classList.remove("open");
+    content.innerHTML = `
+      <div class="card">
+        <h2>About Me</h2>
+        <p><strong>Vipul Bishnoi</strong></p>
+        <p>Professional Web Developer</p>
+        <p>Email: vipulbishnoi2992@gmail.com</p>
+        <p>Phone: 94******07</p>
+
+        <div class="profile-buttons">
+          <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a>
+          <a href="https://github.com/Vipul-029" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    `;
+  }
+
+  // default load
+  showHome();
+</script>
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
