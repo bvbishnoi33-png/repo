@@ -9,21 +9,22 @@
       margin: 0;
       font-family: system-ui, sans-serif;
       background: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
     header {
       background: #0f172a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
-
     .container {
       max-width: 1100px;
       margin: auto;
       padding: 1rem;
+      flex: 1;
     }
-
     .card {
       background: white;
       padding: 1rem;
@@ -31,7 +32,6 @@
       box-shadow: 0 8px 20px rgba(0,0,0,.1);
       margin-bottom: 1rem;
     }
-
     input, textarea {
       width: 100%;
       padding: 10px;
@@ -39,61 +39,52 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-
     button {
       margin-top: 12px;
       padding: 10px;
       width: 100%;
-      border: none;
-      border-radius: 8px;
       background: #2563eb;
       color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
-
-    .delete-btn {
-      background: #dc2626;
+    footer {
+      text-align: center;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      color: #64748b;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Admin Dashboard</h1>
+  <h1>Welcome Admin</h1>
 </header>
 
 <div class="container">
 
-  <!-- ADMIN FORM (admin.js depends on these IDs) -->
   <form id="contentForm" class="card">
     <h3>Add Content</h3>
-
     <input id="title" placeholder="Title" required>
     <textarea id="description" placeholder="Description"></textarea>
     <textarea id="imageUrl" placeholder="Image URLs (comma separated)"></textarea>
     <input id="fileUrl" placeholder="File / Video URL">
     <input id="order" type="number" placeholder="Order">
-
     <button type="submit">Save</button>
   </form>
 
-  <!-- ⚠️ DO NOT WRAP / CHANGE THIS -->
   <div id="adminList"></div>
 
 </div>
 
-<!-- 🔑 CRITICAL: force refresh after delete -->
-<script>
-  document.addEventListener("click", e => {
-    if (e.target.innerText === "Delete") {
-      setTimeout(() => location.reload(), 500);
-    }
-  });
-</script>
+<footer>
+  © 2026 Vipul Bishnoi. All rights reserved.
+</footer>
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/auth.js"></script>
 <script type="module" src="js/admin.js"></script>
-
 </body>
 </html>
