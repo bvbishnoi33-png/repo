@@ -133,29 +133,34 @@
 <script>
   const nav = document.getElementById("nav");
   const content = document.getElementById("contentArea");
+  const gridId = "contentGrid";
+
+  function closeMenu() {
+    nav.classList.remove("open");
+  }
 
   function toggleMenu() {
     nav.classList.toggle("open");
   }
 
   function showHome() {
-    nav.classList.remove("open");
+    closeMenu();
     content.innerHTML = `
       <div class="card">
         <h2>Welcome Dear User 👋</h2>
         <p>
-          This portal is designed to provide important updates, documents,
+          This portal provides important updates, documents,
           notices, and resources in a clean and secure way.
         </p>
         <p>
-          Use the menu to explore different sections.
+          Please explore the menu to stay informed.
         </p>
       </div>
     `;
   }
 
   function showAbout() {
-    nav.classList.remove("open");
+    closeMenu();
     content.innerHTML = `
       <div class="card">
         <h2>About Me</h2>
@@ -173,9 +178,22 @@
     `;
   }
 
-  // default load
+  function load(category) {
+    closeMenu();
+
+    // ensure content grid exists
+    content.innerHTML = `<div id="${gridId}"></div>`;
+
+    // call Firestore loader
+    if (typeof window.loadContent === "function") {
+      window.loadContent(category);
+    }
+  }
+
+  // default
   showHome();
 </script>
+
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
