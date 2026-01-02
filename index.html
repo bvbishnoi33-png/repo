@@ -31,6 +31,7 @@
       background: #1e293b;
       padding: 1rem;
       transition: .3s;
+      z-index: 100;
     }
     nav a {
       display: block;
@@ -39,20 +40,42 @@
       text-decoration: none;
     }
     nav.open { left: 0; }
+
+    .close {
+      color: white;
+      font-size: 20px;
+      text-align: right;
+      cursor: pointer;
+    }
+
     main {
       padding: 1rem;
     }
+
+    /* 🔑 REQUIRED BY user.js */
+    #contentGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
     .card {
       background: white;
       border-radius: 14px;
       padding: 1rem;
-      margin-bottom: 1rem;
       box-shadow: 0 8px 20px rgba(0,0,0,.08);
     }
+
     .empty {
       text-align: center;
       color: #64748b;
       padding: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      #contentGrid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
   </style>
 </head>
@@ -64,6 +87,7 @@
 </header>
 
 <nav id="nav">
+  <div class="close" onclick="toggle()">✕</div>
   <a href="#" onclick="load('news')">News</a>
   <a href="#" onclick="load('instructions')">Instructions</a>
   <a href="#" onclick="load('syllabus')">Syllabus</a>
@@ -73,7 +97,10 @@
   <a href="#" onclick="load('documents')">Documents</a>
 </nav>
 
-<main id="content"></main>
+<main>
+  <!-- 🔑 REQUIRED ID -->
+  <div id="contentGrid"></div>
+</main>
 
 <script>
   function toggle() {
