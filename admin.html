@@ -3,51 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
       background: #f1f5f9;
     }
+
     header {
       background: #0f172a;
       color: white;
       padding: 1rem;
       text-align: center;
     }
+
     .container {
       max-width: 1100px;
       margin: auto;
       padding: 1rem;
     }
+
     .card {
       background: white;
-      padding: 1.2rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.1);
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.1);
       margin-bottom: 1rem;
     }
-    input, textarea, select {
+
+    input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 8px;
+      margin-top: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
+
     button {
       margin-top: 12px;
       padding: 10px;
       width: 100%;
-      background: #2563eb;
-      color: white;
       border: none;
       border-radius: 8px;
+      background: #2563eb;
+      color: white;
       cursor: pointer;
     }
+
     .delete-btn {
       background: #dc2626;
-      margin-top: 8px;
     }
   </style>
 </head>
@@ -59,30 +64,29 @@
 
 <div class="container">
 
-  <!-- ADMIN FORM (unchanged backend expectations) -->
+  <!-- ADMIN FORM (admin.js depends on these IDs) -->
   <form id="contentForm" class="card">
     <h3>Add Content</h3>
 
-    <input id="title" placeholder="Title" required />
+    <input id="title" placeholder="Title" required>
     <textarea id="description" placeholder="Description"></textarea>
     <textarea id="imageUrl" placeholder="Image URLs (comma separated)"></textarea>
-    <input id="fileUrl" placeholder="File / Video URL" />
-    <input id="order" type="number" placeholder="Order" />
+    <input id="fileUrl" placeholder="File / Video URL">
+    <input id="order" type="number" placeholder="Order">
 
     <button type="submit">Save</button>
   </form>
 
-  <!-- 🔑 THIS ID IS REQUIRED BY admin.js -->
+  <!-- ⚠️ DO NOT WRAP / CHANGE THIS -->
   <div id="adminList"></div>
 
 </div>
 
-<!-- UI-only FIX: instant card removal -->
+<!-- 🔑 CRITICAL: force refresh after delete -->
 <script>
   document.addEventListener("click", e => {
-    if (e.target.classList.contains("delete-btn")) {
-      const card = e.target.closest(".card");
-      if (card) card.remove(); // UI removal
+    if (e.target.innerText === "Delete") {
+      setTimeout(() => location.reload(), 500);
     }
   });
 </script>
