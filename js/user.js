@@ -17,3 +17,34 @@ snapshot.forEach(docu => {
     </div>`;
 });
 
+window.loadContent = async function (category) {
+  const q = query(collection(db, "content"), orderBy("order"));
+  const snapshot = await getDocs(q);
+
+  const grid = document.getElementById("contentGrid");
+  grid.innerHTML = "";
+
+  let found = false;
+
+  snapshot.forEach(docSnap => {
+    const d = docSnap.data();
+
+    if (d.category && d.category !== category) return;
+
+    found = true;
+
+    grid.innerHTML += `
+      <div class="card">
+        ${d.imageUrl ? `<img src="${d.imageUrl.split(",")[0]}">` : ""}
+        <h3>${d.title}</h3>
+        <p>${d.description || ""}</p>
+      </div>
+    `;
+  });
+
+  if (!found) {
+    grid.innerHTML = `<div class="empty">No data available</div>`;
+  }
+};
+
+
