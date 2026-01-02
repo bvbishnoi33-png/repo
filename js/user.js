@@ -17,6 +17,7 @@ snapshot.forEach(docu => {
     </div>`;
 });
 
+// ================== CATEGORY LOADER ==================
 window.loadContent = async function (category) {
   const q = query(collection(db, "content"), orderBy("order"));
   const snapshot = await getDocs(q);
@@ -29,7 +30,8 @@ window.loadContent = async function (category) {
   snapshot.forEach(docSnap => {
     const d = docSnap.data();
 
-    if (d.category && d.category !== category) return;
+    // skip if category does not match
+    if (!d.category || d.category !== category) return;
 
     found = true;
 
@@ -42,9 +44,14 @@ window.loadContent = async function (category) {
     `;
   });
 
+  // ✅ GUARANTEED EMPTY MESSAGE
   if (!found) {
-    grid.innerHTML = `<div class="empty">No data available</div>`;
+    grid.innerHTML = `
+      <div class="empty">
+        No data here at present.<br>
+        <small>Stay tuned for more updates…</small>
+      </div>
+    `;
   }
 };
-
 
