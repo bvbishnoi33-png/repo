@@ -132,10 +132,30 @@
 </main>
 
 <script>
+  const nav = document.getElementById("nav");
+  const grid = document.getElementById("contentGrid");
+
   function toggleMenu() {
-    document.getElementById("nav").classList.toggle("open");
+    nav.classList.toggle("open");
+  }
+
+  function load(category) {
+    // close menu automatically
+    nav.classList.remove("open");
+
+    // clear previous content
+    grid.innerHTML = "";
+
+    // store selected category (used by user.js)
+    window.selectedCategory = category;
+
+    // re-run Firestore fetch
+    if (typeof loadContent === "function") {
+      loadContent(category);
+    }
   }
 </script>
+
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
