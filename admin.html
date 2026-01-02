@@ -23,37 +23,31 @@
     }
     .card {
       background: white;
-      padding: 1.5rem;
+      padding: 1.2rem;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,.1);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     input, textarea, select {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
+      margin-top: 8px;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-    label {
-      margin-top: 12px;
-      display: block;
-      font-weight: 600;
-    }
-    .range {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
     button {
-      margin-top: 16px;
-      padding: 12px;
+      margin-top: 12px;
+      padding: 10px;
       width: 100%;
       background: #2563eb;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
+    }
+    .delete-btn {
+      background: #dc2626;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -65,66 +59,32 @@
 
 <div class="container">
 
+  <!-- ADMIN FORM (unchanged backend expectations) -->
   <form id="contentForm" class="card">
-    <h3>Add / Update Content</h3>
+    <h3>Add Content</h3>
 
-    <label>Category</label>
-    <select id="category">
-      <option value="news">News</option>
-      <option value="instructions">Instructions</option>
-      <option value="syllabus">Syllabus</option>
-      <option value="notices">Notices</option>
-      <option value="images">Images</option>
-      <option value="videos">Videos</option>
-      <option value="documents">Documents</option>
-    </select>
+    <input id="title" placeholder="Title" required />
+    <textarea id="description" placeholder="Description"></textarea>
+    <textarea id="imageUrl" placeholder="Image URLs (comma separated)"></textarea>
+    <input id="fileUrl" placeholder="File / Video URL" />
+    <input id="order" type="number" placeholder="Order" />
 
-    <label>Title</label>
-    <input id="title" required />
-
-    <label>Description / Text</label>
-    <textarea id="description"></textarea>
-
-    <label>Image URLs (comma separated)</label>
-    <textarea id="imageUrl" placeholder="url1, url2, url3"></textarea>
-
-    <label>File / Video URL</label>
-    <input id="fileUrl" />
-
-    <label>Image Size</label>
-    <select id="imageSize">
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
-    </select>
-
-    <label>Image Position</label>
-    <select id="position">
-      <option value="center">Center</option>
-      <option value="left">Left</option>
-      <option value="right">Right</option>
-    </select>
-
-    <label>How many items should appear?</label>
-    <div class="range">
-      <input type="range" id="maxItems" min="1" max="10" value="5" />
-      <span id="rangeValue">5</span>
-    </div>
-
-    <label>Display Order</label>
-    <input type="number" id="order" />
-
-    <button type="submit">Save Content</button>
+    <button type="submit">Save</button>
   </form>
 
+  <!-- 🔑 THIS ID IS REQUIRED BY admin.js -->
   <div id="adminList"></div>
 
 </div>
 
+<!-- UI-only FIX: instant card removal -->
 <script>
-  const r = document.getElementById("maxItems");
-  const v = document.getElementById("rangeValue");
-  r.oninput = () => v.textContent = r.value;
+  document.addEventListener("click", e => {
+    if (e.target.classList.contains("delete-btn")) {
+      const card = e.target.closest(".card");
+      if (card) card.remove(); // UI removal
+    }
+  });
 </script>
 
 <script type="module" src="js/firebase.js"></script>
