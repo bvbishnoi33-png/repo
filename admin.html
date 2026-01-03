@@ -1,60 +1,205 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Welcome Admin</title>
+<title>User Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:system-ui;background:#f1f5f9;display:flex;flex-direction:column;min-height:100vh}
-header{background:#0f172a;color:#fff;padding:1rem;text-align:center}
-.container{max-width:900px;margin:auto;padding:1rem;flex:1}
-.card{background:#fff;padding:1rem;border-radius:10px;margin-bottom:1rem;box-shadow:0 6px 18px rgba(0,0,0,.1)}
-label{display:block;margin-top:10px}
-input,textarea,select,button{width:100%;padding:10px;margin-top:5px}
-button{background:#2563eb;color:#fff;border:none;border-radius:6px}
-.delete{background:#dc2626;margin-top:10px}
-footer{text-align:center;font-size:.85rem;color:#64748b;padding:.8rem}
+:root{
+  --bg:#f1f5f9;
+  --card:#ffffff;
+  --border:#e2e8f0;
+  --primary:#1e40af;
+  --text:#0f172a;
+  --muted:#475569;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  height:52px;
+  background:var(--primary);
+  color:white;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  gap:10px;
+}
+
+.menu-btn{font-size:22px;cursor:pointer}
+#pageTitle{font-size:16px;font-weight:500}
+
+/* MENU */
+nav{
+  position:fixed;
+  top:0;left:0;
+  width:260px;height:100%;
+  background:#0f172a;
+  padding:12px;
+  transform:translateX(-100%);
+  transition:.25s;
+  z-index:9999;
+}
+nav.open{transform:translateX(0)}
+
+.nav-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  margin-bottom:10px;
+}
+.close-btn{font-size:22px;cursor:pointer}
+
+nav a{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  color:white;
+  padding:10px 4px;
+  text-decoration:none;
+  font-size:15px;
+  cursor:pointer;
+}
+
+/* MAIN */
+main{padding:14px}
+
+.section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+/* UPDATE LIST */
+.update{
+  padding:12px;
+  border-bottom:1px solid var(--border);
+}
+.update:last-child{border-bottom:none}
+.update-title{font-weight:600}
+.update-desc{color:var(--muted);margin-top:4px}
+
+/* RECENT UPDATES */
+.recent-box{
+  max-height:160px;
+  overflow-y:auto;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+}
+.recent-item{
+  padding:8px;
+  cursor:pointer;
+  border-radius:6px;
+}
+.recent-item:hover{
+  background:#e0e7ff;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+  padding:10px;
+}
 </style>
 </head>
 
 <body>
 
-<header><h2>Welcome Admin</h2></header>
+<header>
+  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  <span id="pageTitle">Home</span>
+</header>
 
-<div class="container">
+<nav id="nav">
+  <div class="nav-header">
+    <strong>Menu</strong>
+    <span class="close-btn" onclick="toggleMenu()">✕</span>
+  </div>
+  <a onclick="showHome()">🏠 Home</a>
+  <a onclick="load('news')">📰 News</a>
+  <a onclick="load('instructions')">📋 Instructions</a>
+  <a onclick="load('syllabus')">📘 Syllabus</a>
+  <a onclick="load('notices')">📢 Notices</a>
+  <a onclick="load('images')">🖼️ Images</a>
+  <a onclick="load('videos')">🎥 Videos</a>
+  <a onclick="load('documents')">📄 Documents</a>
+  <a onclick="showAbout()">ℹ️ About Us</a>
+</nav>
 
-<form id="contentForm" class="card">
-<label>Category</label>
-<select id="category">
-<option value="news">News</option>
-<option value="instructions">Instructions</option>
-<option value="syllabus">Syllabus</option>
-<option value="notices">Notices</option>
-<option value="images">Images</option>
-<option value="videos">Videos</option>
-<option value="documents">Documents</option>
-</select>
+<main id="content"></main>
 
-<label>Title</label>
-<input id="title" required>
+<footer>
+  © 2026 Vipul Bishnoi. All rights reserved.
+</footer>
 
-<label>Description</label>
-<textarea id="description"></textarea>
+<script>
+const nav=document.getElementById("nav");
+const content=document.getElementById("content");
+const title=document.getElementById("pageTitle");
 
-<label>Media URLs (comma separated)</label>
-<textarea id="mediaUrls"></textarea>
+function toggleMenu(){nav.classList.toggle("open")}
 
-<button type="submit">Save Update</button>
-</form>
+function showHome(){
+  toggleMenu();
+  title.textContent="Home";
+  content.innerHTML=`
+    <div class="section">
+      <h3>Welcome Dear User</h3>
+      <p>This portal provides official information, notices and updates.</p>
+    </div>
 
-<div id="adminList"></div>
+    <div class="section">
+      <h4>Recent Updates</h4>
+      <div id="recent" class="recent-box">Loading…</div>
+    </div>
+  `;
+  loadRecent();
+}
 
-</div>
+function showAbout(){
+  toggleMenu();
+  title.textContent="About Us";
+  content.innerHTML=`
+    <div class="section">
+      <h3>Vipul Bishnoi</h3>
+      <p>Professional Web Developer</p>
+      <p>Email: vipulbishnoi2992@gmail.com</p>
+      <p>
+        <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a> |
+        <a href="https://github.com/Vipul-029" target="_blank">GitHub</a> |
+        <a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
+      </p>
+    </div>
+  `;
+}
 
-<footer>© 2026 Vipul Bishnoi. All rights reserved.</footer>
+function load(cat){
+  toggleMenu();
+  title.textContent=cat.toUpperCase();
+  content.innerHTML=`<div id="list" class="section"></div>`;
+  loadContent(cat);
+}
+
+showHome();
+</script>
 
 <script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/auth.js"></script>
-<script type="module" src="js/admin.js"></script>
+<script type="module" src="js/user.js"></script>
+
 </body>
 </html>
