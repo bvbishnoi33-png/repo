@@ -1,265 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Vipul Bishnoi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<title>User Portal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui;background:#f8fafc;min-height:100vh;display:flex;flex-direction:column}
+header{background:#0f172a;color:#fff;padding:1rem;display:flex;gap:1rem;align-items:center}
+.menu{font-size:24px;cursor:pointer}
+nav{position:fixed;top:0;left:0;width:260px;height:100%;background:#1e293b;padding:1rem;transform:translateX(-100%);transition:.3s;z-index:1000}
+nav.open{transform:translateX(0)}
+nav a{display:block;color:#fff;padding:10px 0;text-decoration:none}
+nav .close{text-align:right;color:#fff;font-size:20px;cursor:pointer}
+main{max-width:1300px;margin:auto;padding:1rem;flex:1}
+#contentGrid{display:grid;gap:1rem}
+@media(min-width:600px){#contentGrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){#contentGrid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1200px){#contentGrid{grid-template-columns:repeat(4,1fr)}}
+.card{background:#fff;border-radius:12px;padding:1rem;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.card img{width:100%;border-radius:8px;cursor:pointer}
+footer{text-align:center;padding:.8rem;font-size:.85rem;color:#64748b}
 
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f8fafc;
-      overflow-x: hidden;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .menu {
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 260px;
-      height: 100%;
-      background: #1e293b;
-      padding: 1rem;
-      transform: translateX(-100%);
-      transition: .3s;
-      z-index: 1000;
-    }
-    nav.open { transform: translateX(0); }
-
-    nav a {
-      display: block;
-      color: white;
-      padding: 12px 0;
-      text-decoration: none;
-    }
-
-    nav .close {
-      text-align: right;
-      font-size: 20px;
-      cursor: pointer;
-      color: white;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: auto;
-      padding: 1.5rem;
-      flex: 1;
-      animation: fade .4s ease;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 1.5rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,.08);
-      margin-bottom: 1rem;
-    }
-
-    .profile-buttons a {
-      display: inline-block;
-      margin: 6px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 0.8rem;
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-
-    .recent-container {
-  margin-top: 1.2rem;
-}
-
-.recent-box {
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.08);
-  padding: 1rem;
-  overflow: hidden;
-  height: 160px;
-  position: relative;
-}
-
-.recent-title {
-  font-weight: 600;
-  margin-bottom: 0.6rem;
-}
-
-.recent-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.recent-item {
-  padding: 10px;
-  margin-bottom: 6px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background .2s;
-}
-
-.recent-item:hover {
-  background: #e2e8f0;
-}
-
-/* NORMAL SPEED (HSBTE-like) */
-.scroll {
-  animation: scrollUp 6s linear infinite;
-}
-
-@keyframes scrollUp {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
-}
-    
-  </style>
+/* MODAL */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:2000}
+.modal img{max-width:90%;max-height:90%}
+.modal span{position:absolute;top:20px;right:30px;color:#fff;font-size:30px;cursor:pointer}
+</style>
 </head>
-<body>
 
+<body>
 <header>
-  <span class="menu" onclick="toggleMenu()">☰</span>
-  <h2 id="pageTitle">Home</h2>
+<span class="menu" onclick="toggleMenu()">☰</span>
+<h2 id="pageTitle">Home</h2>
 </header>
 
-
 <nav id="nav">
-  <div class="close" onclick="toggleMenu()">✕</div>
-  <a href="#" onclick="showHome()">Home</a>
-  <a href="#" onclick="load('news')">News</a>
-  <a href="#" onclick="load('instructions')">Instructions</a>
-  <a href="#" onclick="load('syllabus')">Syllabus</a>
-  <a href="#" onclick="load('notices')">Notices</a>
-  <a href="#" onclick="load('images')">Images</a>
-  <a href="#" onclick="load('videos')">Videos</a>
-  <a href="#" onclick="load('documents')">Documents</a>
-  <a href="#" onclick="showAbout()">About Us</a>
+<div class="close" onclick="toggleMenu()">✕</div>
+<a onclick="load('news')">News</a>
+<a onclick="load('instructions')">Instructions</a>
+<a onclick="load('syllabus')">Syllabus</a>
+<a onclick="load('notices')">Notices</a>
+<a onclick="load('images')">Images</a>
+<a onclick="load('videos')">Videos</a>
+<a onclick="load('documents')">Documents</a>
 </nav>
 
-<main id="contentArea">
-  <!-- Home loads by default -->
-</main>
+<main><div id="contentGrid"></div></main>
 
-<footer>
-  © 2026 Vipul Bishnoi. All rights reserved.
-</footer>
+<footer>© 2026 Vipul Bishnoi. All rights reserved.</footer>
+
+<div class="modal" id="modal">
+<span onclick="closeModal()">×</span>
+<img id="modalImg">
+</div>
 
 <script>
-  const nav = document.getElementById("nav");
-  const content = document.getElementById("contentArea");
-  const title = document.getElementById("pageTitle");
-
-  function closeMenu() {
-    nav.classList.remove("open");
-  }
-
-  function toggleMenu() {
-    nav.classList.toggle("open");
-  }
-
-  function setTitle(text) {
-    title.textContent = text;
-  }
-
-  function showHome() {
-    closeMenu();
-    setTitle("Home");
-
-    content.innerHTML = `
-      <div class="card">
-        <h2>Welcome Dear User 👋</h2>
-        <p>
-          This portal provides important announcements, notices,
-          documents, and updates in a structured and user-friendly way.
-        </p>
-      </div>
-
-      <div class="recent-container">
-        <div class="recent-box">
-          <div class="recent-title">Recent Updates</div>
-          <div id="recentList" class="recent-list">
-            <div class="empty">Loading recent updates…</div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    loadRecentUpdates();
-  }
-
-
-  function showAbout() {
-    closeMenu();
-    setTitle("About Us");
-
-    content.innerHTML = `
-      <div class="card">
-        <h2>About Me</h2>
-        <p><strong>Vipul Bishnoi</strong></p>
-        <p>Professional Web Developer</p>
-        <p>Email: vipulbishnoi2992@gmail.com</p>
-        <p>Phone: 94******07</p>
-
-        <div class="profile-buttons">
-          <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a>
-          <a href="https://github.com/Vipul-029" target="_blank">GitHub</a>
-          <a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
-        </div>
-      </div>
-    `;
-  }
-
-  function load(category) {
-    closeMenu();
-    setTitle(category.charAt(0).toUpperCase() + category.slice(1));
-
-    content.innerHTML = `<div id="contentGrid"></div>`;
-
-    if (typeof window.loadContent === "function") {
-      window.loadContent(category);
-    }
-  }
-
-  // default
-  showHome();
+const nav=document.getElementById("nav");
+function toggleMenu(){nav.classList.toggle("open")}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function openModal(src){
+  document.getElementById("modalImg").src=src;
+  document.getElementById("modal").style.display="flex";
+}
+function load(cat){
+  nav.classList.remove("open");
+  pageTitle.textContent=cat.toUpperCase();
+  contentGrid.innerHTML="";
+  window.loadContent(cat);
+}
 </script>
-
-
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
-
 </body>
 </html>
