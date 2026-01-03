@@ -1,88 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>User Portal</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:system-ui;background:#f8fafc;display:flex;flex-direction:column;min-height:100vh}
-header{background:#0f172a;color:#fff;padding:1rem;display:flex;gap:1rem}
-.menu{font-size:24px;cursor:pointer}
-nav{position:fixed;top:0;left:0;width:260px;height:100%;background:#1e293b;padding:1rem;transform:translateX(-100%);transition:.3s}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:#f8fafc;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ===== HEADER (NORMAL HEIGHT) ===== */
+header{
+  height:52px;
+  background:#0f172a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  gap:10px;
+}
+
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+}
+
+.header-icon{
+  font-size:18px;
+}
+
+#pageTitle{
+  font-size:16px;
+  font-weight:500;
+}
+
+/* ===== SIDEBAR MENU ===== */
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  width:260px;
+  height:100%;
+  background:#1e293b;
+  padding:12px;
+  transform:translateX(-100%);
+  transition:transform .25s ease;
+  z-index:9999; /* 🔥 prevents penetration */
+}
+
 nav.open{transform:translateX(0)}
-nav a{color:#fff;display:block;padding:10px 0;text-decoration:none}
-main{flex:1;padding:1rem}
-.card{background:#fff;padding:1rem;border-radius:10px;margin-bottom:1rem;box-shadow:0 6px 18px rgba(0,0,0,.08)}
-.buttons a{display:inline-block;margin:6px;padding:10px 14px;border-radius:6px;background:#2563eb;color:#fff;text-decoration:none}
-.recent{height:140px;overflow:hidden}
-.recent.scroll{animation:scroll 6s linear infinite}
-@keyframes scroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
-footer{text-align:center;font-size:.85rem;color:#64748b;padding:.8rem}
+
+.nav-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.close-btn{
+  font-size:22px;
+  cursor:pointer;
+}
+
+nav a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  padding:10px 4px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+/* ===== MAIN CONTENT ===== */
+main{
+  padding:12px;
+}
+
+.card{
+  background:#fff;
+  border-radius:8px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+/* ===== RECENT UPDATES ===== */
+.recent-box{
+  height:140px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.recent-list.scroll{
+  animation:scrollUp 6s linear infinite;
+}
+
+@keyframes scrollUp{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-50%)}
+}
+
+.recent-item{
+  padding:8px;
+  background:#f1f5f9;
+  margin-bottom:6px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+  padding:10px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<span class="menu" onclick="nav.classList.toggle('open')">☰</span>
-<h3 id="title">Home</h3>
+  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  <span class="header-icon" id="headerIcon">🏠</span>
+  <span id="pageTitle">Home</span>
 </header>
 
 <nav id="nav">
-<a onclick="home()">Home</a>
-<a onclick="load('news')">News</a>
-<a onclick="load('instructions')">Instructions</a>
-<a onclick="load('syllabus')">Syllabus</a>
-<a onclick="load('notices')">Notices</a>
-<a onclick="load('images')">Images</a>
-<a onclick="load('videos')">Videos</a>
-<a onclick="load('documents')">Documents</a>
-<a onclick="about()">About Us</a>
+  <div class="nav-header">
+    <strong>Menu</strong>
+    <span class="close-btn" onclick="closeMenu()">✕</span>
+  </div>
+
+  <a onclick="showHome()">🏠 Home</a>
+  <a onclick="load('news','📰')">📰 News</a>
+  <a onclick="load('instructions','📋')">📋 Instructions</a>
+  <a onclick="load('syllabus','📘')">📘 Syllabus</a>
+  <a onclick="load('notices','📢')">📢 Notices</a>
+  <a onclick="load('images','🖼️')">🖼️ Images</a>
+  <a onclick="load('videos','🎥')">🎥 Videos</a>
+  <a onclick="load('documents','📄')">📄 Documents</a>
+  <a onclick="showAbout()">ℹ️ About Us</a>
 </nav>
 
 <main id="content"></main>
 
-<footer>© 2026 Vipul Bishnoi. All rights reserved.</footer>
+<footer>
+  © 2026 Vipul Bishnoi. All rights reserved.
+</footer>
 
 <script>
+const nav=document.getElementById("nav");
 const content=document.getElementById("content");
-const title=document.getElementById("title");
+const title=document.getElementById("pageTitle");
+const icon=document.getElementById("headerIcon");
 
-function home(){
-title.textContent="Home";
-content.innerHTML=`
-<div class="card">Welcome Dear User 👋</div>
-<div class="card">
-<strong>Recent Updates</strong>
-<div id="recent" class="recent">Loading…</div>
-</div>`;
-loadRecent();
+function toggleMenu(){nav.classList.toggle("open")}
+function closeMenu(){nav.classList.remove("open")}
+
+function setHeader(text,ic){
+  title.textContent=text;
+  icon.textContent=ic;
 }
 
-function about(){
-title.textContent="About Us";
-content.innerHTML=`
-<div class="card">
-<h3>Vipul Bishnoi</h3>
-<p>Professional Web Developer</p>
-<div class="buttons">
-<a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a>
-<a href="https://github.com/Vipul-029" target="_blank">GitHub</a>
-<a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
-</div>
-</div>`;
+function showHome(){
+  closeMenu();
+  setHeader("Home","🏠");
+  content.innerHTML=`
+    <div class="card">
+      <h3>Welcome Dear User 👋</h3>
+      <p>Please use the menu to explore updates and information.</p>
+    </div>
+
+    <div class="card">
+      <strong>Recent Updates</strong>
+      <div class="recent-box">
+        <div id="recent" class="recent-list">Loading…</div>
+      </div>
+    </div>`;
+  loadRecent();
 }
 
-function load(cat){
-title.textContent=cat.toUpperCase();
-content.innerHTML=`<div id="grid"></div>`;
-loadContent(cat);
+function showAbout(){
+  closeMenu();
+  setHeader("About Us","ℹ️");
+  content.innerHTML=`
+    <div class="card">
+      <h3>Vipul Bishnoi</h3>
+      <p>Professional Web Developer</p>
+      <p>
+        <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a> |
+        <a href="https://github.com/Vipul-029" target="_blank">GitHub</a> |
+        <a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
+      </p>
+    </div>`;
 }
 
-home();
+function load(cat,ic){
+  closeMenu();
+  setHeader(cat.toUpperCase(),ic);
+  content.innerHTML=`<div id="grid"></div>`;
+  if(window.loadContent) window.loadContent(cat);
+}
+
+showHome();
 </script>
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
+
 </body>
 </html>
