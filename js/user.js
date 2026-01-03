@@ -60,10 +60,10 @@ window.loadRecent = async function(){
     div.className="recent-item";
     div.textContent=i.title;
     div.onclick = () => {
-  closeMenu();
-  load(i.category);
+  closeMenu();          // 🔒 force close
+  load(i.category);     // navigate
 };
-;
+
     box.appendChild(div);
   });
 };
