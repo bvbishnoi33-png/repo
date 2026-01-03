@@ -201,12 +201,14 @@
       <div class="card">
         <h2>Welcome Dear User 👋</h2>
         <p>
-          Stay updated with the latest information, notices, documents,
-          and announcements.
+          This portal provides important announcements, notices,
+          documents, and updates in a structured and user-friendly way.
         </p>
+      </div>
 
-        <h3>Recent Updates</h3>
+      <div class="recent-container">
         <div class="recent-box">
+          <div class="recent-title">Recent Updates</div>
           <div id="recentList" class="recent-list">
             <div class="empty">Loading recent updates…</div>
           </div>
@@ -216,6 +218,7 @@
 
     loadRecentUpdates();
   }
+
 
   function showAbout() {
     closeMenu();
