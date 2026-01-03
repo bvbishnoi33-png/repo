@@ -1,69 +1,239 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body{margin:0;font-family:Arial;background:#f1f5f9}
-    header{background:#0f172a;color:#fff;padding:1rem;text-align:center}
-    .box{max-width:700px;margin:20px auto;background:#fff;
-         padding:15px;border-radius:8px}
-    label{display:block;margin-top:10px}
-    input,textarea,select,button{
-      width:100%;padding:10px;margin-top:5px
-    }
-    button{background:#2563eb;color:#fff;border:none}
-  </style>
+<meta charset="UTF-8">
+<title>User Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+  background: #0f172a;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#pageTitle {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* SIDEBAR MENU */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  background: #1e293b;
+  padding: 1rem;
+  transform: translateX(-100%);
+  transition: .3s;
+  z-index: 1000;
+}
+
+nav.open { transform: translateX(0); }
+
+nav a {
+  display: block;
+  color: white;
+  padding: 12px 0;
+  text-decoration: none;
+}
+
+nav .close {
+  text-align: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+/* MAIN CONTENT — FULL WIDTH LOOK */
+main {
+  flex: 1;
+  padding: 1rem;
+}
+
+/* Full width container with small margins */
+.content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* CONTENT BLOCKS */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* GRID FOR IMAGES / VIDEOS */
+#contentGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  #contentGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  #contentGrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1200px) {
+  #contentGrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+#contentGrid img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* EMPTY MESSAGE */
+.empty {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h2>Welcome Admin</h2>
+  <span class="menu" onclick="toggleMenu()">☰</span>
+  <h2 id="pageTitle">Home</h2>
 </header>
 
-<div class="box">
-  <form id="contentForm">
+<nav id="nav">
+  <div class="close" onclick="toggleMenu()">✕</div>
+  <a onclick="showHome()">Home</a>
+  <a onclick="load('news')">News</a>
+  <a onclick="load('instructions')">Instructions</a>
+  <a onclick="load('syllabus')">Syllabus</a>
+  <a onclick="load('notices')">Notices</a>
+  <a onclick="load('images')">Images</a>
+  <a onclick="load('videos')">Videos</a>
+  <a onclick="load('documents')">Documents</a>
+  <a onclick="showAbout()">About Us</a>
+</nav>
 
-    <label>Category</label>
-    <select id="category">
-      <option value="news">News</option>
-      <option value="instructions">Instructions</option>
-      <option value="syllabus">Syllabus</option>
-      <option value="notices">Notices</option>
-      <option value="images">Images</option>
-      <option value="videos">Videos</option>
-      <option value="documents">Documents</option>
-    </select>
+<main>
+  <div class="content-wrapper" id="contentArea"></div>
+</main>
 
-    <label>Content Type</label>
-    <select id="type">
-      <option value="text">Text</option>
-      <option value="image">Image</option>
-      <option value="video">Video</option>
-      <option value="document">Document</option>
-    </select>
+<footer>
+  © 2026 Vipul Bishnoi. All rights reserved.
+</footer>
 
-    <label>Title</label>
-    <input id="title">
+<script>
+const nav = document.getElementById("nav");
+const content = document.getElementById("contentArea");
+const title = document.getElementById("pageTitle");
 
-    <label>Description</label>
-    <textarea id="description"></textarea>
+function toggleMenu() {
+  nav.classList.toggle("open");
+}
 
-    <label>Media URLs (comma separated)</label>
-    <textarea id="mediaUrls"></textarea>
+function closeMenu() {
+  nav.classList.remove("open");
+}
 
-    <label>Order</label>
-    <input id="order" type="number">
+/* HOME */
+function showHome() {
+  closeMenu();
+  title.textContent = "Home";
 
-    <button type="submit">Save</button>
-  </form>
-</div>
+  content.innerHTML = `
+    <div class="card">
+      <h2>Welcome Dear User 👋</h2>
+      <p>
+        This portal provides official announcements, notices,
+        documents, and updates in a clean and organised way.
+      </p>
+      <p>
+        Please use the menu to explore different sections.
+      </p>
+    </div>
+  `;
+}
+
+/* ABOUT */
+function showAbout() {
+  closeMenu();
+  title.textContent = "About Us";
+
+  content.innerHTML = `
+    <div class="card">
+      <h2>Vipul Bishnoi</h2>
+      <p><strong>Professional Web Developer</strong></p>
+      <p>Email: vipulbishnoi2992@gmail.com</p>
+      <p>Phone: 94******07</p>
+
+      <p>
+        <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a> |
+        <a href="https://github.com/Vipul-029" target="_blank">GitHub</a> |
+        <a href="https://www.linkedin.com/in/vipul-bishnoi-717827362" target="_blank">LinkedIn</a>
+      </p>
+    </div>
+  `;
+}
+
+/* LOAD CATEGORY CONTENT */
+function load(category) {
+  closeMenu();
+  title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+
+  content.innerHTML = `
+    <div class="content-wrapper">
+      <div id="contentGrid"></div>
+    </div>
+  `;
+
+  if (window.loadContent) {
+    window.loadContent(category);
+  }
+}
+
+/* DEFAULT */
+showHome();
+</script>
 
 <script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/auth.js"></script>
-<script type="module" src="js/admin.js"></script>
+<script type="module" src="js/user.js"></script>
 
 </body>
 </html>
