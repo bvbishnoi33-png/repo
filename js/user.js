@@ -54,31 +54,40 @@ window.loadContent = async function (category) {
     `;
   }
 };
-// ================== RECENT UPDATES ==================
+/// ================== RECENT UPDATES ==================
 window.loadRecentUpdates = async function () {
   const q = query(collection(db, "content"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
 
-  const box = document.getElementById("recentList");
-  if (!box) return;
+  const list = document.getElementById("recentList");
+  if (!list) return;
 
-  box.innerHTML = "";
+  list.innerHTML = "";
 
-  let count = 0;
+  let items = [];
 
   snapshot.forEach(docSnap => {
-    if (count >= 4) return;
-
     const d = docSnap.data();
-    if (!d.title || !d.category) return;
+    if (d.title && d.category) {
+      items.push(d);
+    }
+  });
 
-    count++;
+  // NO UPDATES
+  if (items.length === 0) {
+    list.innerHTML = `<div class="empty">No recent updates available</div>`;
+    return;
+  }
 
-    const item = document.createElement("div");
-    item.className = "recent-item";
-    item.textContent = d.title;
+  // SHOW ONLY TOP 4
+  const showItems = items.slice(0, 4);
 
-    item.onclick = () => {
+  showItems.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "recent-item";
+    div.textContent = d.title;
+
+    div.onclick = () => {
       document.getElementById("pageTitle").textContent =
         d.category.charAt(0).toUpperCase() + d.category.slice(1);
 
@@ -88,14 +97,13 @@ window.loadRecentUpdates = async function () {
       window.loadContent(d.category);
     };
 
-    box.appendChild(item);
+    list.appendChild(div);
   });
 
-  if (count === 0) {
-    box.innerHTML = `<div class="empty">No recent updates at the moment</div>`;
-  } else {
-    // duplicate for infinite scroll effect
-    box.innerHTML += box.innerHTML;
+  // ✅ APPLY SCROLL ONLY IF AT LEAST 1 ITEM EXISTS
+  if (showItems.length > 0) {
+    list.innerHTML += list.innerHTML; // duplicate for infinite loop
+    list.classList.add("scroll");
   }
 };
 
