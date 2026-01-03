@@ -97,17 +97,42 @@
       font-size: 0.85rem;
       color: #64748b;
     }
+
+    .recent-box {
+  margin-top: 1rem;
+  overflow: hidden;
+  height: 140px;
+  position: relative;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  animation: scrollUp 10s linear infinite;
+}
+
+.recent-item {
+  padding: 10px;
+  background: #f1f5f9;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes scrollUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+    
   </style>
 </head>
 <body>
 
 <header>
   <span class="menu" onclick="toggleMenu()">☰</span>
-  <div>
-    <strong>Vipul Bishnoi</strong><br>
-    <small>Professional Web Developer</small>
-  </div>
+  <h2 id="pageTitle">Home</h2>
 </header>
+
 
 <nav id="nav">
   <div class="close" onclick="toggleMenu()">✕</div>
@@ -133,7 +158,7 @@
 <script>
   const nav = document.getElementById("nav");
   const content = document.getElementById("contentArea");
-  const gridId = "contentGrid";
+  const title = document.getElementById("pageTitle");
 
   function closeMenu() {
     nav.classList.remove("open");
@@ -143,24 +168,38 @@
     nav.classList.toggle("open");
   }
 
+  function setTitle(text) {
+    title.textContent = text;
+  }
+
   function showHome() {
     closeMenu();
+    setTitle("Home");
+
     content.innerHTML = `
       <div class="card">
         <h2>Welcome Dear User 👋</h2>
         <p>
-          This portal provides important updates, documents,
-          notices, and resources in a clean and secure way.
+          Stay updated with the latest information, notices, documents,
+          and announcements.
         </p>
-        <p>
-          Please explore the menu to stay informed.
-        </p>
+
+        <h3>Recent Updates</h3>
+        <div class="recent-box">
+          <div id="recentList" class="recent-list">
+            <div class="empty">Loading recent updates…</div>
+          </div>
+        </div>
       </div>
     `;
+
+    loadRecentUpdates();
   }
 
   function showAbout() {
     closeMenu();
+    setTitle("About Us");
+
     content.innerHTML = `
       <div class="card">
         <h2>About Me</h2>
@@ -180,11 +219,10 @@
 
   function load(category) {
     closeMenu();
+    setTitle(category.charAt(0).toUpperCase() + category.slice(1));
 
-    // ensure content grid exists
-    content.innerHTML = `<div id="${gridId}"></div>`;
+    content.innerHTML = `<div id="contentGrid"></div>`;
 
-    // call Firestore loader
     if (typeof window.loadContent === "function") {
       window.loadContent(category);
     }
@@ -193,6 +231,7 @@
   // default
   showHome();
 </script>
+
 
 
 <script type="module" src="js/firebase.js"></script>
