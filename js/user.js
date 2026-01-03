@@ -29,14 +29,14 @@ window.loadContent = async function(category){
 
   if(!found){
     list.innerHTML=`
-      <div class="update">
-        <em>No updates at the moment. Please stay tuned for further announcements.</em>
+      <div class="update empty">
+        No updates at the moment. Please stay tuned for further announcements.
       </div>
     `;
   }
 };
 
-/* LOAD RECENT UPDATES (MANUAL SCROLL ONLY) */
+/* LOAD RECENT UPDATES */
 window.loadRecent = async function(){
   const box=document.getElementById("recent");
   const q=query(collection(db,"content"),orderBy("createdAt","desc"));
@@ -47,7 +47,9 @@ window.loadRecent = async function(){
 
   if(items.length===0){
     box.innerHTML=`
-      <em>No updates at the moment. Please stay tuned for further announcements.</em>
+      <div class="empty">
+        No updates at the moment. Please stay tuned for further announcements.
+      </div>
     `;
     return;
   }
