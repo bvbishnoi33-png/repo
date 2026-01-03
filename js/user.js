@@ -59,7 +59,11 @@ window.loadRecent = async function(){
     const div=document.createElement("div");
     div.className="recent-item";
     div.textContent=i.title;
-    div.onclick=()=>load(i.category);
+    div.onclick = () => {
+  closeMenu();
+  load(i.category);
+};
+;
     box.appendChild(div);
   });
 };
