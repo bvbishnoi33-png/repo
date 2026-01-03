@@ -204,7 +204,9 @@ const nav=document.getElementById("nav");
 const content=document.getElementById("content");
 const title=document.getElementById("pageTitle");
 
-function toggleMenu(){nav.classList.toggle("open")}
+function toggleMenu(){
+  nav.classList.contains("open") ? closeMenu() : nav.classList.add("open");
+}
 
 function showHome(){
   toggleMenu();
@@ -248,7 +250,14 @@ function load(cat){
   loadContent(cat);
 }
 
+  function closeMenu() {
+  nav.classList.remove("open");
+  }
+  
+
+closeMenu();
 showHome();
+  
 </script>
 
 <script type="module" src="js/firebase.js"></script>
