@@ -2,36 +2,45 @@ import {
   collection, getDocs, query, orderBy
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-window.loadContent = async function(category){
-  const q=query(collection(db,"content"),orderBy("order"));
-  const snap=await getDocs(q);
-  const grid=document.getElementById("contentGrid");
+window.loadContent = async cat=>{
+  const grid=document.getElementById("grid");
+  const snap=await getDocs(collection(db,"content"));
   grid.innerHTML="";
   let found=false;
 
   snap.forEach(d=>{
-    const data=d.data();
-    if(data.category!==category) return;
+    const x=d.data();
+    if(x.category!==cat) return;
     found=true;
-
-    const card=document.createElement("div");
-    card.className="card";
-
-    card.innerHTML=`<h3>${data.title}</h3><p>${data.description||""}</p>`;
-
-    if(data.type==="image"){
-      data.mediaUrls.forEach(url=>{
-        const img=document.createElement("img");
-        img.src=url;
-        img.onclick=()=>openModal(url);
-        card.appendChild(img);
-      });
-    }
-
-    grid.appendChild(card);
+    grid.innerHTML+=`<div class="card"><strong>${x.title}</strong><p>${x.description||""}</p></div>`;
   });
 
   if(!found){
-    grid.innerHTML=`<div class="card">No data here at present. Stay tuned for more updates…</div>`;
+    grid.innerHTML=`<div class="card"><em>No updates at the moment. Please stay tuned for further announcements.</em></div>`;
   }
+};
+
+window.loadRecent = async ()=>{
+  const box=document.getElementById("recent");
+  const q=query(collection(db,"content"),orderBy("createdAt","desc"));
+  const snap=await getDocs(q);
+
+  let items=[];
+  snap.forEach(d=>items.push(d.data()));
+
+  if(items.length===0){
+    box.innerHTML="<em>No updates at the moment. Please stay tuned for further announcements.</em>";
+    return;
+  }
+
+  box.innerHTML="";
+  items.slice(0,4).forEach(i=>{
+    const div=document.createElement("div");
+    div.textContent=i.title;
+    div.onclick=()=>load(i.category);
+    box.appendChild(div);
+  });
+
+  box.innerHTML+=box.innerHTML;
+  box.classList.add("scroll");
 };
