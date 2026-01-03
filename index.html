@@ -200,18 +200,29 @@ footer{
 </footer>
 
 <script>
-const nav=document.getElementById("nav");
-const content=document.getElementById("content");
-const title=document.getElementById("pageTitle");
+const nav = document.getElementById("nav");
+const content = document.getElementById("content");
+const title = document.getElementById("pageTitle");
 
-function toggleMenu(){
-  nav.classList.contains("open") ? closeMenu() : nav.classList.add("open");
+/* ===== MENU STATE (NO TOGGLE) ===== */
+function openMenu() {
+  nav.classList.add("open");
+}
+function closeMenu() {
+  nav.classList.remove("open");
 }
 
-function showHome(){
-  toggleMenu();
-  title.textContent="Home";
-  content.innerHTML=`
+/* ===== PAGE LOAD SAFETY ===== */
+window.addEventListener("load", () => {
+  closeMenu();   // 🔒 GUARANTEED CLOSED
+  showHome();
+});
+
+/* ===== HOME ===== */
+function showHome() {
+  closeMenu();
+  title.textContent = "Home";
+  content.innerHTML = `
     <div class="section">
       <h3>Welcome Dear User</h3>
       <p>This portal provides official information, notices, and updates.</p>
@@ -225,15 +236,15 @@ function showHome(){
   loadRecent();
 }
 
-function showAbout(){
-  toggleMenu();
-  title.textContent="About Us";
-  content.innerHTML=`
+/* ===== ABOUT ===== */
+function showAbout() {
+  closeMenu();
+  title.textContent = "About Us";
+  content.innerHTML = `
     <div class="section">
       <h3>Vipul Bishnoi</h3>
       <p>Professional Web Developer</p>
       <p>Email: vipulbishnoi2992@gmail.com</p>
-
       <div class="about-buttons">
         <a href="https://t.me/Unknownbishnoi07" target="_blank">Telegram</a>
         <a href="https://github.com/Vipul-029" target="_blank">GitHub</a>
@@ -243,22 +254,15 @@ function showAbout(){
   `;
 }
 
-function load(cat){
-  toggleMenu();
-  title.textContent=cat.toUpperCase();
-  content.innerHTML=`<div id="list" class="section"></div>`;
-  loadContent(cat);
+/* ===== LOAD SECTION ===== */
+function load(category) {
+  closeMenu();   // 🔒 FORCE CLOSE
+  title.textContent = category.toUpperCase();
+  content.innerHTML = `<div id="list" class="section"></div>`;
+  loadContent(category);
 }
-
-  function closeMenu() {
-  nav.classList.remove("open");
-  }
-  
-
-closeMenu();
-showHome();
-  
 </script>
+
 
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/user.js"></script>
