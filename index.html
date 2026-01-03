@@ -98,25 +98,46 @@
       color: #64748b;
     }
 
-    .recent-box {
-  margin-top: 1rem;
+    .recent-container {
+  margin-top: 1.2rem;
+}
+
+.recent-box {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  padding: 1rem;
   overflow: hidden;
-  height: 140px;
+  height: 160px;
   position: relative;
+}
+
+.recent-title {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
 }
 
 .recent-list {
   display: flex;
   flex-direction: column;
-  animation: scrollUp 10s linear infinite;
 }
 
 .recent-item {
   padding: 10px;
-  background: #f1f5f9;
   margin-bottom: 6px;
+  background: #f1f5f9;
   border-radius: 8px;
   cursor: pointer;
+  transition: background .2s;
+}
+
+.recent-item:hover {
+  background: #e2e8f0;
+}
+
+/* NORMAL SPEED (HSBTE-like) */
+.scroll {
+  animation: scrollUp 6s linear infinite;
 }
 
 @keyframes scrollUp {
