@@ -54,4 +54,48 @@ window.loadContent = async function (category) {
     `;
   }
 };
+// ================== RECENT UPDATES ==================
+window.loadRecentUpdates = async function () {
+  const q = query(collection(db, "content"), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+
+  const box = document.getElementById("recentList");
+  if (!box) return;
+
+  box.innerHTML = "";
+
+  let count = 0;
+
+  snapshot.forEach(docSnap => {
+    if (count >= 4) return;
+
+    const d = docSnap.data();
+    if (!d.title || !d.category) return;
+
+    count++;
+
+    const item = document.createElement("div");
+    item.className = "recent-item";
+    item.textContent = d.title;
+
+    item.onclick = () => {
+      document.getElementById("pageTitle").textContent =
+        d.category.charAt(0).toUpperCase() + d.category.slice(1);
+
+      document.getElementById("contentArea").innerHTML =
+        `<div id="contentGrid"></div>`;
+
+      window.loadContent(d.category);
+    };
+
+    box.appendChild(item);
+  });
+
+  if (count === 0) {
+    box.innerHTML = `<div class="empty">No recent updates at the moment</div>`;
+  } else {
+    // duplicate for infinite scroll effect
+    box.innerHTML += box.innerHTML;
+  }
+};
 
