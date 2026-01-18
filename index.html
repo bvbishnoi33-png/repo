@@ -195,7 +195,47 @@ footer{
 </nav>
 
 <main id="content"></main>
+<!-- MEDIA PREVIEW MODAL -->
+<div id="mediaModal" style="
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.85);
+  z-index:10000;
+  align-items:center;
+  justify-content:center;
+">
+  <span onclick="closeModal()" style="
+    position:absolute;
+    top:20px;
+    right:30px;
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+  ">✕</span>
+  <div id="modalContent"></div>
+</div>
 
+<script>
+function openImage(src){
+  document.getElementById("modalContent").innerHTML =
+    `<img src="${src}" style="max-width:90vw;max-height:90vh;border-radius:8px">`;
+  document.getElementById("mediaModal").style.display="flex";
+}
+
+function openVideo(src){
+  document.getElementById("modalContent").innerHTML =
+    `<video src="${src}" controls autoplay style="max-width:90vw;max-height:90vh;border-radius:8px"></video>`;
+  document.getElementById("mediaModal").style.display="flex";
+}
+
+function closeModal(){
+  document.getElementById("mediaModal").style.display="none";
+  document.getElementById("modalContent").innerHTML="";
+}
+</script>
+  
 <footer>
   © 2026 Vipul Bishnoi. All rights reserved.
 </footer>
